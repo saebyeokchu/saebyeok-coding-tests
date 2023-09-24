@@ -1,240 +1,67 @@
-'''
+import math
 
-4
-PPPP
-CYZY
-CCPY
-PPCC
+#check 연속성
+def checkContinuity(board, longestResult, checkRow, checkCol) :
+    max_cnt = 1
+    
+    for i in range(N) :
+        cnt = 1
+        for j in range(1, N):
+            if board[i][j] == board[i][j-1]:
+                cnt += 1
+            else:
+                cnt = 1
+            max_cnt = max(max_cnt, cnt)
 
-'''
-import numpy
+        cnt = 1
+        for j in range(1, N):
+            if board[j][i] == board[j-1][i]:
+                cnt += 1
+            else:
+                cnt = 1
+            max_cnt = max(max_cnt, cnt)
+    
+    return max_cnt
+    
+def swap(board,targetRow,targetCol,sourceRow,sourceCol) :
+    temp = board[targetRow][targetCol];
+    board[targetRow][targetCol] = board[sourceRow][sourceCol]
+    board[sourceRow][sourceCol] = temp
 
-def checkRight(board, row, col, boardLen, longestResult) :
-    tempLogestResult = longestResult
+def check(board, row, col, boardLen, ans, direc) :
     
-    #swap value
-    left = board[row][col]
-    right = board[row][col+1]
+    targetRow = row + direc[0]
+    targetCol = col + direc[1]
     
-    board[row][col] = right
-    board[row][col+1] = left
+    if targetRow < 0 or targetRow >= boardLen :
+        return ans
     
-    startValue = left
-    count = 1
+    if targetCol < 0 or targetCol >= boardLen :
+        return ans
     
-    print("====board[{}][{}]오른쪽체크=====".format(row,col))
-    print(board)
+    swap(board, row, col, targetRow, targetCol)
+    result = checkContinuity(board, ans, row, col)
+    swap(board, row, col, targetRow,targetCol)
     
-    #해당 row의 가로 체크
-    for i in range(0,boardLen-1) :
-        if board[row][i] == startValue and board[row][i] == board[row][i+1] :
-            count = count + 1
-            
+    return max(result,ans)
     
-    if count > 1 and count > longestResult:
-        tempLogestResult = count
-    
-    print("가로체크 ===> logest result : ",longestResult,", count : ",count)
-    
-    count = 1
-    
-    #해당 col의 세로 체크
-    for i in range(0,boardLen-1) :
-        if board[i][col] == startValue and board[i][col] == board[i+1][col] :
-            count = count + 1
-    
-    if count > 1 and count > longestResult:
-        tempLogestResult = count
-    
-    print("세로체크 ===> logest result : ",tempLogestResult,", count : ",count)
-        
-    board[row][col] = left
-    board[row][col+1] = right
-    
-    return tempLogestResult
+N = int(input())
+board = [list(input()) for _ in range(N)]
+ans = 0
 
-def checkLeft(board, row, col, boardLen, longestResult) :
-    tempLogestResult = longestResult
+direction = [
+    [0,1], #오른쪽
+    [1,0], #아래쪽
+]
     
-    #swap value
-    left = board[row][col-1]
-    right = board[row][col]
-    
-    board[row][col-1] = right
-    board[row][col] = left
-    
-    startValue = right
-    count = 1
-    
-    print("====board[{}][{}]왼쪽체크=====".format(row,col))
-    print(board)
-    
-    #해당 row의 가로 체크
-    for i in range(0,boardLen-1) :
-        if board[row][i] == startValue and board[row][i] == board[row][i+1] :
-            count = count + 1
-            
-    
-    if count > 1 and count > longestResult:
-        tempLogestResult = count
-    
-    print("가로체크 ===> logest result : ",longestResult,", count : ",count)
-    
-    count = 1
-    
-    #해당 col의 세로 체크
-    for i in range(0,boardLen-1) :
-        if board[i][col] == startValue and board[i][col] == board[i+1][col] :
-            count = count + 1
-    
-    if count > 1 and count > longestResult:
-        tempLogestResult = count
-    
-    print("세로체크 ===> logest result : ",tempLogestResult,", count : ",count)
-        
-    board[row][col-1] = left
-    board[row][col] = right
-    
-    return tempLogestResult
 
-def checkTop(board, row, col, boardLen, longestResult) :
-    tempLogestResult = longestResult
-    
-    #swap value
-    top = board[row-1][col]
-    bottom = board[row][col]
-    
-    board[row-1][col] = bottom
-    board[row][col] = top
-    
-    startValue = bottom
-    count = 1
-    
-    print("====board[{}][{}]위쪽체크=====".format(row,col))
-    print(board)
-    
-    #해당 row의 가로 체크
-    for i in range(0,boardLen-1) :
-        if board[row][i] == startValue and board[row][i] == board[row][i+1] :
-            count = count + 1
-            
-    
-    if count > 1 and count > longestResult:
-        tempLogestResult = count
-    
-    print("가로체크 ===> logest result : ",longestResult,", count : ",count)
-    
-    count = 1
-    
-    #해당 col의 세로 체크
-    for i in range(0,boardLen-1) :
-        if board[i][col] == startValue and board[i][col] == board[i+1][col] :
-            count = count + 1
-    
-    if count > 1 and count > longestResult:
-        tempLogestResult = count
-    
-    print("세로체크 ===> logest result : ",tempLogestResult,", count : ",count)
-        
-    board[row][col-1] = top
-    board[row][col] = bottom
-    
-    return tempLogestResult
-    
-def checkBottom(board, row, col, boardLen, longestResult) :
-    tempLogestResult = longestResult
-    
-    #swap value
-    top = board[row][col]
-    bottom = board[row+1][col]
-    
-    board[row][col] = bottom
-    board[row+1][col] = top
-    
-    startValue = top
-    count = 1
-    
-    print("====board[{}][{}]아래쪽체크=====".format(row,col))
-    print(board)
-    
-    #해당 row의 가로 체크
-    for i in range(0,boardLen-1) :
-        if board[row][i] == startValue and board[row][i] == board[row][i+1] :
-            count = count + 1
-            
-    
-    if count > 1 and count > longestResult:
-        tempLogestResult = count
-    
-    print("가로체크 ===> logest result : ",longestResult,", count : ",count)
-    
-    count = 1
-    
-    #해당 col의 세로 체크
-    for i in range(0,boardLen-1) :
-        if board[i][col] == startValue and board[i][col] == board[i+1][col] :
-            count = count + 1
-    
-    if count > 1 and count > longestResult:
-        tempLogestResult = count
-    
-    print("세로체크 ===> logest result : ",tempLogestResult,", count : ",count)
-        
-    board[row][col] = top
-    board[row+1][col] = bottom
-    
-    return tempLogestResult    
-    
-boardLen = 4
-inputs_ = ''
-
-for i in range(0,boardLen) :
-    inputs_ = inputs_ + input()
-board = numpy.full((boardLen,boardLen), ' ')
-longestResult = 0;
-
-#initial setting
-for row in range(0,boardLen) :
-    for col in range(0,boardLen) :
-        board[row][col] = inputs_[row*3+col]
- 
 #check one by one
-for row in range(0,boardLen) :
-    for col in range(0,boardLen) :
-        #check right
-        #check if right value exist
-        if col + 1 != boardLen :
-            longestResult = checkRight(board, row, col, boardLen, longestResult)
-            if longestResult == boardLen :
-                break;
-            print("\n\n")
-        
-        #check left
-        if col - 1 >= 0 :
-            longestResult = checkLeft(board, row, col, boardLen, longestResult)
-            if longestResult == boardLen :
-                break;
-            print("\n\n")
-            
-        #check top
-        if row - 1 >= 0 :
-            longestResult = checkTop(board, row, col, boardLen, longestResult)
-            if longestResult == boardLen :
-                break;
-            print("\n\n")
-        
-        #check bottom
-        if row + 1 != boardLen :
-            longestResult = checkBottom(board, row, col, boardLen, longestResult)
-            if longestResult == boardLen :
-                break;
-            print("\n\n")
-print(longestResult)
+for row in range(0,N) :
+    for col in range(0,N) :
+        for direc in direction :
+            ans = check(board, row, col, N, ans, direc)
+            if ans == N :
+                break
 
-
-
-
-
-
-
-
+                
+print(ans)
