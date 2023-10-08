@@ -1,28 +1,38 @@
-M = 7
-S = ' \
-0110100 \
-0110101 \
-1110101 \
-0000111 \
-0100000 \
-0111110 \
-0111000  '
-M = []
+N = int(input())
+M = [list(map(int, input())) for _ in range(N)]
+visited = [[0 for j in range(N)] for i in range(N)]
+ans = []
 
-temp = []
-for s_ in S :
-     if s_.isspace() and len(temp) > 0 :
-         M.append(temp)
-         temp=[]
-     elif s_.isspace() == False :
-         temp.append(int(s_))
+direction = [[1,0],[0,1],[0,-1],[-1, 0]]
 
-# 0,0 부터 시작한다
-# 오른쪽과 왼쪽을 탐색하고 방문을 체크한다
-# 1이라면 탐색을 진행하고 0이면 탐색을 종료한다
-# 모든 탐색이 종료되면 단지로 할당한다
-# visited되지 않은 곳을 골라서 반복한다
-# 모두 visited 될때까지
-print(M)
-         
-         
+for i in range(N) :
+    for j in range(N) :
+        queue = []
+        if M[i][j] == 1 and visited[i][j] == 0:
+            visited[i][j] = 1
+            queue.append([i,j])
+            count = 1
+            
+            while len(queue) > 0 :
+                item = queue.pop(0)
+                
+                currentX = item[0]
+                currentY = item[1]
+                
+                for direct in direction :
+                    
+                    nextX = currentX + direct[0]
+                    nextY = currentY + direct[1]
+                    
+                    if 0 <= nextX < N and  0 <= nextY < N :
+                    
+                        if M[nextX][nextY] == 1 and  visited[nextX][nextY] == 0 :
+                            count += 1
+                            visited[nextX][nextY] = 1
+                            queue.append([nextX,nextY])
+            if count > 0 :
+                ans.append(count)
+
+ans.sort()
+print(len(ans))
+print(*ans,sep="\n")
