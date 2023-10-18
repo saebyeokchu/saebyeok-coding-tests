@@ -30,7 +30,23 @@ STEP = STEP - X
 STEP = Y + Math.abs(STEP)
 #STEP이 세로 길이를 넘었다
 Y = H
-# H만큼이동했으므로 STEP을 조정해야 한다
+# H만큼이동했으므로 STEP을 조정해야 한다 STEP이 4만큼 남았다
 STEP = STEP - Y
 
-#
+#아래쪽 체크
+#아래쪽은 x값이 늘어나야 한다
+STEP = X + STEP
+#STEP이 가로길이를 넘었다
+X = W
+# W만큼 이동했으므로 STEP을 조정해야 한다. STEP이 1만큼 남았다
+STEP = STEP - X
+
+#오른쪽 체크
+#오른쪽은 Y값이 줄어들어야 한다
+STEP = Y - STEP
+#Y가 0보다 작지 않다
+Y = STEP
+#STEP을 체크한다
+STEP = STEP - Y
+
+#스텝이 모두 소진되었다.
