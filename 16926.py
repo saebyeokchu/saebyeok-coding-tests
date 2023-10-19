@@ -1,52 +1,39 @@
-'''
-123
-456
-789
+def put_chain(c, k, n , m, r, A):
 
-반시계 방향으로 일곱번 돌리기
+def get_chain(k,n,m,A) :
+    c = [0] * ((n + m - 2) * 2)
+    
+    i, j = k, k
+    
+    for _ in range(n-1):
+        c[t] = A[i][j]
+        i += 1; t+= 1
+    for _ in range(m-1):
+        c[t] = A[i][j]
+        j += 1; t+= 1
+    for _ in range(n-1):
+        c[t] = A[i][j]
+        i += 1; t+= 1
+    for _ in range(m-1):
+        c[t] = A[i][j]
+        j -= 1; t+= 1
+    
+    return c
 
-'''
+def rotate(k, n, m, r, A):
+    chain = get_chain(k, n, m ,A )
+    pos = len(chain) - (r % len(chain))
+    rotated = chain[pos:]+chain[:pos]
+    put_chain(rotated, k, n , m, r, A)
 
-L = [[1,2,3],[4,5,6],[7,8,9]]
-R = 7 #7번 돌리기
-W = H = 3 #가로 세로 모두 3이라고 가정함
+def solve(n,m,r,A) :
+    for k in range(min(n,m) // 2):
+        rotate(k, n, m, r, A)
+    
+    for i in range(n):
+        print(" ".join(map(str, A[i])))
 
-V = [[0]*R]*R
+n, m, r = map(int, input().split())
+A = [list(map(int,input().split())) for _ in range(n)]
 
-X = Y = 0
-
-#위쪽 체크
-#위쪽은 X값이 작아져야 한다
-# X = X - 7 = -7 => 왼쪽으로 7칸 가야하지만 지금 0이라 -7이 됨
-STEP = X - R
-#STEP이 마이너스 값이 되었으므로 X를 0으로 설정한다
-X = 0
-#한발자국도 가지 못했으므로 STEP을 조정할 필요 없다
-STEP = STEP - X
-
-#왼쪽 체크
-#왼쪽은 Y값이 늘어나야 한다
-#STEP여유분이 7만큼 남았다
-STEP = Y + Math.abs(STEP)
-#STEP이 세로 길이를 넘었다
-Y = H
-# H만큼이동했으므로 STEP을 조정해야 한다 STEP이 4만큼 남았다
-STEP = STEP - Y
-
-#아래쪽 체크
-#아래쪽은 x값이 늘어나야 한다
-STEP = X + STEP
-#STEP이 가로길이를 넘었다
-X = W
-# W만큼 이동했으므로 STEP을 조정해야 한다. STEP이 1만큼 남았다
-STEP = STEP - X
-
-#오른쪽 체크
-#오른쪽은 Y값이 줄어들어야 한다
-STEP = Y - STEP
-#Y가 0보다 작지 않다
-Y = STEP
-#STEP을 체크한다
-STEP = STEP - Y
-
-#스텝이 모두 소진되었다.
+solve(n,m,r,A)
