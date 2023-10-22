@@ -1,34 +1,61 @@
-N = 6 #6개 톱니바퀴
-S = '\
-110011 \
-011100 \
-110011'
+N = int(input())
+L = [list(map(int,input())) for _ in range(N)]
 
-L = [list(map(int,s)) for s in S.split(" ")]
+#2번의 ACTION
+A = int(input())
+AD = []
 
-A = 2 #2번의 ACTION
-AD = [[1,1],[2,-1]] #1번 톱니바퀴를 시계방향으로 , 2번째 톱니바퀴를 반시게방향으로 한번씩
+for _ in range(A) :
+    AD.append(list(map(int,input().split(" "))))
+queue = []
 
-ad = AD[0]
-
-start = ad[0]-1
-#첫번재 톱니바퀴 선택
-gear = L[start]
-
-#첫번째 톱니바퀴를 오른쪽으로 1회회전
-if ad[1] == 1 : #시계방향
+def clockWise(gear) :
     right = gear[-1:]
     left = gear[:-1]
     
-    new = right + left
-else :
+    return right + left
+
+def counterColckWise(gear) :
     right = gear[1:]
     left = gear[:1]
     
-    new = right + left
+    return right + left
 
-gear = new
+queue = []
 
-#붙어있는 부분을 체크
-if gear[1] == L[1][4] :
-    #L[1]을 반시계방향으로 회전
+for ad in AD :
+    v = [0] * N
+    queue = [ad]
+
+    while len(queue) > 0 :
+        q = queue.pop(0)
+            
+        gearIndex = q[0] - 1
+        goTo = q[1]
+    
+        v[gearIndex] = 1
+        
+        leftTouchVal = L[gearIndex][6]
+        rightTouchVal = L[gearIndex][2]
+        
+        #첫번째 톱니바퀴를 오른쪽으로 1회회전
+        L[gearIndex] =  clockWise(L[gearIndex]) if goTo == 1 else counterColckWise(L[gearIndex])
+    
+        #왼쪽, 오른쪽 톱니 바퀴 번호
+        leftGearIndex = gearIndex - 1
+        rightGearIndex = gearIndex + 1
+        
+        if leftGearIndex >= 0 and leftGearIndex < len(L) and v[leftGearIndex] == 0:
+            if L[leftGearIndex][2] != leftTouchVal :
+                queue.append([leftGearIndex+1, goTo*(-1)])
+                    
+        if rightGearIndex >= 0 and rightGearIndex < len(L) and v[rightGearIndex] == 0:
+            if rightTouchVal != L[rightGearIndex][6] :
+                queue.append([rightGearIndex+1, goTo*(-1)])
+
+count = 0
+for l in L :
+    if l[0] == 1 :
+        count += 1
+        
+print(count)
