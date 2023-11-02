@@ -20,7 +20,7 @@ for j in range(N-1,0,-1) :
         R[j] = 0
         L[j] -= 1
     else:
-        if L[j + 1] > 0 :
+        if R[j] > 0 and L[j+1] > 0 :
             R[j + 1] = R[j] #옮길 자리에는 로봇이 없을것이다
             L[j + 1] -= 1
 
