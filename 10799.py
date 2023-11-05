@@ -1,24 +1,25 @@
-l = '()(((()())(())()))(())'
-
-l = list(_ for _ in l)
+l = list(_ for _ in input())
 
 stack = []
-razer = 0  
-piece = 0
+razer = []  
+piece = []
 
 for i in range(len(l)) :
-    print(razer)
-    print(stack)
-    print(piece)
-    print("///")
-    if len(stack)==0 :
-        razer = 0
+    
     if l[i] == "(" :
         stack.append(i)
     else :
         index = stack.pop(len(stack)-1)
-        
         if abs(i-index) == 1 :
-            razer += 1
+            razer.append(i-1)
         else :
-            piece += razer + 1
+            #find razer which has bigger index then pipe
+            count = 0
+            for r in razer :
+                if r > index :
+                    count += 1
+            piece.append( count + 1 )
+            
+        if len(stack)==0 :
+            razer = []
+print(sum(piece))
