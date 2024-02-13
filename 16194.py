@@ -1,11 +1,20 @@
-n = 4
-p=[0] + [3,5,15,16]
+n = 5
+p=[0] + [10,9,8,7,6]
 d = [0] * (n+1)
 
 d[n] = p[n]
 
-def find():
+def find(chase, total):
 
-for i in range(1, n) :
-    find(0, i)
-        
+    if chase == n :
+        print("total : " , total)
+        return
+    
+    if chase > n :
+        return
+    
+    for i in range(1, n+1) :
+        find(chase+i, total + p[i])
+
+for i in range(1, n+1) :
+    find(i, p[i])
