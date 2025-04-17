@@ -1,3 +1,5 @@
+#prints the Greatest Common Divisor (GCD) and Least Common Multiple (LCM)
+
 a, b = map(int, input().split(" "))
 greatestCommonDivisor = 1
 leastCommonMultiple = 1
